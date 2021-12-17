@@ -25,6 +25,16 @@ pipeline {
         '''
       }
     }
+    stage('SCA - Blackduck') {
+      steps {
+        echo "Running Blackduck"
+        sh '''
+          rm -fr /tmp/detect7.sh
+          curl -s -L https://detect.synopsys.com/detect7.sh > /tmp/detect7.sh
+          bash /tmp/detect7.sh --blackduck.url="${BLACKDUCK_URL}" --blackduck.api.token="${BLACKDUCK_ACCESS_TOKEN}" --detect.project.name="${IO_POC_PROJECT_NAME}" --detect.project.version.name=${IO_POC_PROJECT_VERSION} --blackduck.trust.cert=true
+        '''
+      }
+    }
     stage('Clean Workspace') {
       steps {
         cleanWs()
