@@ -6,12 +6,12 @@ pipeline {
     IO_POC_PROJECT_VERSION = "1.0"
     POLARIS_ACCESS_TOKEN = credentials('polaris-token')
     BLACKDUCK_ACCESS_TOKEN = credentials('BlackDuck-AuthToken')
-    IS_SAST_ENABLED = "false"
-    IS_SCA_ENABLED = "false"
-    IS_DAST_ENABLED = "false"
-    IS_IMAGE_SCAN_ENABLED = "false"
-    IS_CODE_REVIEW_ENABLED = "false"
-    IS_PEN_TESTING_ENABLED = "false"
+    IS_SAST_ENABLED=$(jq -r '.security.activities.sast.enabled' result.json)    
+    IS_SCA_ENABLED=$(jq -r '.security.activities.sca.enabled' result.json)
+    IS_DAST_ENABLED=$(jq -r '.security.activities.dast.enabled' result.json)
+    IS_IMAGE_SCAN_ENABLED=$(jq -r '.security.activities.imageScan.enabled' result.json)
+    IS_CODE_REVIEW_ENABLED=$(jq -r '.security.activities.sastplusm.enabled' result.json)
+    IS_PEN_TESTING_ENABLED=$(jq -r '.security.activities.dastplusm.enabled' result.json)
   }
 
   stages {
