@@ -121,6 +121,15 @@ pipeline {
           '''
       }
     }
+    stage('Break the Build') {
+      steps {
+        echo "add Build Breaker parts here"
+        sh '''
+          echo "Breaker Status - $(jq -r '.breaker.status' wf-output.json)"
+          # Put code to break the build here
+        '''
+      }
+    }
     stage('Clean Workspace') {
       steps {
         cleanWs()
