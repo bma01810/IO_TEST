@@ -4,6 +4,7 @@ pipeline {
   environment {
     IO_POC_PROJECT_NAME = 'bma_IO-POC-insecure-bank'
     IO_POC_PROJECT_VERSION = "1.0"
+    IO_ACCESS_TOKEN = credentials('IO-AUTH-TOKEN')
     POLARIS_ACCESS_TOKEN = credentials('polaris-token')
     BLACKDUCK_ACCESS_TOKEN = credentials('BlackDuck-AuthToken')
     IS_SAST_ENABLED= "false"   
