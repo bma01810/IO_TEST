@@ -94,6 +94,33 @@ pipeline {
         '''
       }
     }
+    stage('Schedule Manual Activities') {
+      steps {
+        echo "Check for Scheduling of Manual Actviities"
+        echo "Manual Code Review"
+        sh '''
+          IS_CODE_REVIEW_ENABLED=$(jq -r '.security.activities.sastplusm.enabled' io-presciption.json)
+          echo "IS_CODE_REVIEW_ENABLED = ${IS_CODE_REVIEW_ENABLED}"
+          if [ ${IS_CODE_REVIEW_ENABLED} = "true" ]; then
+            echo "Sending Notification for Manual Code Review based on IO Precription"
+            # Put code to send notification here
+          else
+            echo "Skipping Manual Code Review based on IO Precription"
+          fi
+          '''
+        echo "Manual Penetration Testing"
+        sh '''
+          IS_PEN_TESTING_ENABLED=$(jq -r '.security.activities.dastplusm.enabled' io-presciption.json)
+          echo "IS_PEN_TESTING_ENABLED = ${IS_PEN_TESTING_ENABLED}"
+          if [ ${IS_PEN_TESTING_ENABLED} = "true" ]; then
+            echo "Sending Notification for Manual Penetration Testing based on IO Precription"
+            # Put code to send notification here
+          else
+            echo "Skipping Manual Penetration Testing based on IO Precription"
+          fi
+          '''
+      }
+    }
     stage('Clean Workspace') {
       steps {
         cleanWs()
