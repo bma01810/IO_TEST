@@ -20,6 +20,73 @@ pipeline {
         sh 'mvn -e clean package -DskipTests'
       }
     }
+    stage('IO Prescription') {
+      steps {
+        echo "Getting IO Prescription"
+        sh '''
+          rm -fr prescription.sh
+          wget "https://raw.githubusercontent.com/synopsys-sig/io-artifacts/${WORKFLOW_CLIENT_VERSION}/prescription.sh"
+          sed -i -e 's/\r$//' prescription.sh
+          chmod a+x prescription.sh
+          ./prescription.sh \
+          --stage="IO" \
+          --persona="devsecops" \
+          --io.url="${IO_URL}" \
+          --io.token="${IO_ACCESS_TOKEN}" \
+          --manifest.type="json" \
+          --asset.id="insecure-bank" \
+          --workflow.url="${WORKFLOW_URL}" \
+          --workflow.version="${WORKFLOW_CLIENT_VERSION}" \
+          --file.change.threshold="10" \
+          --sast.rescan.threshold="20" \
+          --sca.rescan.threshold="20" \
+          --scm.type="github" \
+          --scm.owner="dagebei" \
+          --scm.repo.name="insecure-bank" \
+          --scm.branch.name="main" \
+          --github.username="dagebei" \
+          --github.token="${GTIHUB_ACCESS_TOKEN}" \
+          --polaris.project.name="${IO_POC_PROJECT_NAME}" \
+          --polaris.url="${POLARIS_SERVER_URL}" \
+          --polaris.token="${POLARIS_ACCESS_TOKEN}" \
+          --blackduck.project.name="${IO_POC_PROJECT_NAME}:${IO_POC_PROJECT_VERSION}" \
+          --blackduck.url="${BLACKDUCK_URL}" \
+          --blackduck.api.token="${BLACKDUCK_ACCESS_TOKEN}" \
+          --jira.enable="false" \
+          --codedx.url="${CODEDX_SERVER_URL}" \
+          --codedx.api.key="${CODEDX_ACCESS_TOKEN}" \
+          --codedx.project.id="5" \
+          --IS_SAST_ENABLED="${IS_SAST_ENABLED}" \
+          --IS_SCA_ENABLED="${IS_SCA_ENABLED}" \
+          --IS_DAST_ENABLED="${IS_DAST_ENABLED}"
+        '''
+        sh 'mv result.json io-presciption.json'
+        sh '''
+          echo "==================================== IO Risk Score =======================================" > io-risk-score.txt
+          echo "Business Criticality Score - $(jq -r '.riskScoreCard.bizCriticalityScore' io-presciption.json)" >> io-risk-score.txt
+          echo "Data Class Score - $(jq -r '.riskScoreCard.dataClassScore' io-presciption.json)" >> io-risk-score.txt
+          echo "Access Score - $(jq -r '.riskScoreCard.accessScore' io-presciption.json)" >> io-risk-score.txt
+          echo "Open Vulnerability Score - $(jq -r '.riskScoreCard.openVulnScore' io-presciption.json)" >> io-risk-score.txt
+          echo "Change Significance Score - $(jq -r '.riskScoreCard.changeSignificanceScore' io-presciption.json)" >> io-risk-score.txt
+          export bizScore=$(jq -r '.riskScoreCard.bizCriticalityScore' io-presciption.json | cut -d'/' -f2) 
+          export dataScore=$(jq -r '.riskScoreCard.dataClassScore' io-presciption.json | cut -d'/' -f2)
+          export accessScore=$(jq -r '.riskScoreCard.accessScore' io-presciption.json | cut -d'/' -f2)
+          export vulnScore=$(jq -r '.riskScoreCard.openVulnScore' io-presciption.json | cut -d'/' -f2)
+          export changeScore=$(jq -r '.riskScoreCard.changeSignificanceScore' io-presciption.json | cut -d'/' -f2)
+          echo -n "Total Score - " >> io-risk-score.txt && echo "$bizScore + $dataScore + $accessScore + $vulnScore + $changeScore" | bc >> io-risk-score.txt
+        '''
+        sh 'cat io-risk-score.txt'
+        sh '''
+          echo "IS_SAST_ENABLED = $(jq -r '.security.activities.sast.enabled' io-presciption.json)" > io-prescription.txt
+          echo "IS_SCA_ENABLED = $(jq -r '.security.activities.sca.enabled' io-presciption.json)" >> io-prescription.txt
+          echo "IS_DAST_ENABLED = $(jq -r '.security.activities.dast.enabled' io-presciption.json)" >> io-prescription.txt
+          echo "IS_IMAGE_SCAN_ENABLED = $(jq -r '.security.activities.imageScan.enabled' io-presciption.json)" >> io-prescription.txt
+          echo "IS_CODE_REVIEW_ENABLED = $(jq -r '.security.activities.sastplusm.enabled' io-presciption.json)" >> io-prescription.txt
+          echo "IS_PEN_TESTING_ENABLED = $(jq -r '.security.activities.dastplusm.enabled' io-presciption.json)" >> io-prescription.txt
+        '''
+        sh 'cat io-prescription.txt'
+      }
+    }
     stage('SAST - Coverity') {
       steps {
         echo "Stage - Coverity on Polaris"
