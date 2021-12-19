@@ -2,10 +2,16 @@ pipeline {
   agent any
 
   environment {
-    IO_POC_PROJECT_NAME = 'IO-POC-insecure-bank'
+    IO_POC_PROJECT_NAME = 'bma_IO-POC-insecure-bank'
     IO_POC_PROJECT_VERSION = "1.0"
     POLARIS_ACCESS_TOKEN = credentials('polaris-token')
     BLACKDUCK_ACCESS_TOKEN = credentials('BlackDuck-AuthToken')
+    IS_SAST_ENABLED = "false"
+    IS_SCA_ENABLED = "false"
+    IS_DAST_ENABLED = "false"
+    IS_IMAGE_SCAN_ENABLED = "false"
+    IS_CODE_REVIEW_ENABLED = "false"
+    IS_PEN_TESTING_ENABLED = "false"
   }
 
   stages {
