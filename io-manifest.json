@@ -1,27 +1,27 @@
 {
    "application": {
-      "appId": "insecure-bank",
-      "assetId": "insecure-bank",
+      "appId": "bma_insecure_bank",
+      "assetId": "bma_insecure_bank",
       "appType": "Webapp",
-      "release": "<<RELEASE_TYPE>>",
+      "release": "1.1.1",
       "microservice": false,
-      "projectLanguage": "Java",
-      "platformVersion": "Java 11",
+      "projectLanguage": "JavaScript",
+      "platformVersion": "JavaScript",
       "buildSystem": "Maven",
       "riskMatrixRevision": "high-risk",
       "sourceFilePattern": ".*\\+\\+\\+.*(\\.java|\\.jsp)+.*",
       "sensitivePackagePattern": "<<SENSITIVE_PACKAGE_PATTERN>>",
-      "fileChangeThreshold": "<<FILE_CHANGE_THRESHOLD>>"
+      "fileChangeThreshold": "3"
    },
    "environment": {
-      "scm": "<<SCM_TYPE>>",
-      "scmOwner": "<<SCM_OWNER>>",
-      "scmRepositoryName": "<<SCM_REPO_NAME>>",
-      "scmBranchName": "<<SCM_BRANCH_NAME>>",
+      "scm": "github",
+      "scmOwner": "bma01810",
+      "scmRepositoryName": "IO_TEST",
+      "scmBranchName": "main",
       "githubApiUrl": "https://api.github.com/repos/",
       "githubUsername": "<<GITHUB_USERNAME>>",
       "githubToken": "<<GITHUB_ACCESS_TOKEN>>",
-      "enableJira": "<<ENABLE_JIRA>>",
+      "enableJira": "false",
       "jiraProjectName": "<<JIRA_PROJECT_NAME>>",
       "jiraIssuesQuery": "<<JIRA_ISSUES_QUERY>>",
       "jiraApiUrl": "<<JIRA_API_URL>>",
@@ -31,10 +31,10 @@
    "security": {
       "activities": {
          "sast": {
-            "rescanThreshold": "<<SAST_RESCAN_THRESHOLD>>"
+            "rescanThreshold": 1
          },
          "sca": {
-            "rescanThreshold": "<<SCA_RESCAN_THRESHOLD>>"
+            "rescanThreshold": 1
          },
          "sastplusm": {
             "rescanThreshold": 1
@@ -66,10 +66,12 @@
          "status": [
             "new",
             "open"
+
          ],
          "overallseverity": [
             "critical",
             "high"
+
          ]
       }
    ],
@@ -78,7 +80,7 @@
          "tool_name": "polaris",
          "enabled": "<<IS_SAST_ENABLED>>",
          "fields": {
-            "project_name": "<<POLARIS_PROJECT_NAME>>",
+            "project_name": " <<POLARIS_PROJECT_NAME>>",
             "instance_url": "<<POLARIS_SERVER_URL>>",
             "auth_token": "<<POLARIS_ACCESS_TOKEN>>"
          }
