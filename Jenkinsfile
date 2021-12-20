@@ -153,7 +153,7 @@ pipeline {
           --jira.enable="false" \
           --codedx.url="${CODEDX_SERVER_URL}" \
           --codedx.api.key="${CODEDX_ACCESS_TOKEN}" \
-          --codedx.project.id="5" \
+          --codedx.project.id="6" \
           --IS_SAST_ENABLED="${IS_SAST_ENABLED}" \
           --IS_SCA_ENABLED="${IS_SCA_ENABLED}" \
           --IS_DAST_ENABLED="${IS_DAST_ENABLED}"
