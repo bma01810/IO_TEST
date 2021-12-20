@@ -7,7 +7,7 @@ pipeline {
     IO_ACCESS_TOKEN = credentials('IO-AUTH-TOKEN')
     POLARIS_ACCESS_TOKEN = credentials('polaris-token')
     BLACKDUCK_ACCESS_TOKEN = credentials('BlackDuck-AuthToken')
-    GTIHUB_ACCESS_TOKEN = credentials('Github-AuthToken')
+    HUB_ACCESS_TOKEN = credentials('bma-git-creds')
     CODEDX_ACCESS_TOKEN = credentials('CODEDX_API_KEY')
     IS_SAST_ENABLED= "false"   
     IS_SCA_ENABLED= "false"  
@@ -44,11 +44,11 @@ pipeline {
           --sast.rescan.threshold="20" \
           --sca.rescan.threshold="20" \
           --scm.type="github" \
-          --scm.owner="dagebei" \
-          --scm.repo.name="insecure-bank" \
+          --scm.owner="bma01810" \
+          --scm.repo.name="IO_TEST" \
           --scm.branch.name="main" \
-          --github.username="dagebei" \
-          --github.token="${GTIHUB_ACCESS_TOKEN}" \
+          --github.username="bma01810" \
+          --github.token="${HUB_ACCESS_TOKEN}" \
           --polaris.project.name="${IO_POC_PROJECT_NAME}" \
           --polaris.url="${POLARIS_SERVER_URL}" \
           --polaris.token="${POLARIS_ACCESS_TOKEN}" \
