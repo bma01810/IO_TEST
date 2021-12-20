@@ -7,7 +7,7 @@ pipeline {
     IO_ACCESS_TOKEN = credentials('IO-AUTH-TOKEN')
     POLARIS_ACCESS_TOKEN = credentials('polaris-token')
     BLACKDUCK_ACCESS_TOKEN = credentials('BlackDuck-AuthToken')
-    HUB_ACCESS_TOKEN = credentials('bma-git-creds')
+    GTIHUB_ACCESS_TOKEN = credentials('bma-git-creds')
     CODEDX_ACCESS_TOKEN = credentials('CODEDX_API_KEY')
     IS_SAST_ENABLED= "false"   
     IS_SCA_ENABLED= "false"  
